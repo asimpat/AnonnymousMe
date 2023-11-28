@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Message } from 'src/message/schema/message.schema';
 
 export enum Roles {
   USER = 'user',
@@ -17,9 +18,12 @@ export class User extends Document {
   password: string;
 
   @Prop({
-    default: Roles.USER
+    default: Roles.USER,
   })
   role: Roles;
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Message' }] })
+  messages: Message[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

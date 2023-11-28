@@ -67,7 +67,7 @@ export class AuthService {
   }
 
   async getAllUsers() {
-    const result = await this.userModel.find();
+    const result = await this.userModel.find().populate('messages');
     const totalUsers = await this.userModel.countDocuments();
     result.forEach((user) => delete user.password);
 

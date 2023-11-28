@@ -9,6 +9,7 @@ import { User } from './schema/user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcryptjs';
 import { UserDto } from './dto/user.dto';
+import { UserRegisterDto } from './dto/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,7 @@ export class AuthService {
     return { accessToken: this.jwtService.sign(payload) };
   }
 
-  async registerUser(register: UserDto): Promise<User> {
+  async registerUser(register: UserRegisterDto): Promise<User> {
     const { username, password } = register;
     const usernameExist = await this.findByUsername(register.username);
     if (usernameExist) {
@@ -63,5 +64,13 @@ export class AuthService {
 
       return this.generateJwt(user);
     }
+  }
+
+  async getAllUsers() {
+    const result = await this.userModel.find();
+    const totalUsers = await this.userModel.countDocuments();
+    result.forEach((user) => delete user.password);
+
+    return { result, totalUsers };
   }
 }

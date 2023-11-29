@@ -28,7 +28,7 @@ export class AuthService {
     return { accessToken: this.jwtService.sign(payload) };
   }
 
-  async registerUser(register: UserRegisterDto): Promise<User> {
+  async registerUser(register: UserRegisterDto): Promise<User | object> {
     const { username, password } = register;
     const usernameExist = await this.findByUsername(register.username);
     if (usernameExist) {
@@ -44,7 +44,7 @@ export class AuthService {
     });
 
     const userWithoutPassword = user.toJSON();
-    return userWithoutPassword;
+    return { msg: `${userWithoutPassword.username} successfully registered` };
   }
 
   async loginUser(payload: UserDto) {
@@ -62,7 +62,7 @@ export class AuthService {
         throw new BadRequestException('Incorrect credentials ');
       }
 
-      return this.generateJwt(user);
+      return { message: 'Login successful!' };
     }
   }
 

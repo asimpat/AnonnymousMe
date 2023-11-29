@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { MessageService } from './message.service';
 
 @Controller('message')
@@ -30,8 +23,14 @@ export class MessageController {
     return this.messageService.getUserMessages(username);
   }
 
-  @Get(':id')
-  async findOneMessage(@Param('id', ParseIntPipe) id: number) {
-    return await this.messageService.findOneMessage(id);
+  @Get('/find/:id')
+   findOneMessage(@Param('id') id: number) {
+    return this.messageService.findOneMessage(id);
   }
+
+  @Delete('/delete/:id')
+  deleteMesaage(@Param('id') id: number) {
+    return this.messageService.deleteMessage(id)
+  }
+
 }

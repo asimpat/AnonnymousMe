@@ -9,7 +9,7 @@ export class Message extends Document {
   @Prop()
   message: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'User' }) 
+  @Prop({ type: Types.ObjectId, ref: 'User' })
   user: Types.ObjectId | User;
 }
 

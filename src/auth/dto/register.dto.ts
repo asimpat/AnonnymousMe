@@ -2,7 +2,7 @@ import { IsOptional, IsNotEmpty, Length, IsString } from 'class-validator';
 export class UserRegisterDto {
   @IsNotEmpty()
   @IsString()
-  @Length(4, 30)
+  @Length(2, 30)
   username: string;
 
   @IsNotEmpty()

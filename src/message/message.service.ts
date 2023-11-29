@@ -5,8 +5,7 @@ import {
 } from '@nestjs/common';
 import { Message } from './schema/message.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { User } from 'src/auth/schema/user.schema';
+import mongoose, { Model } from 'mongoose';
 import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
@@ -30,12 +29,12 @@ export class MessageService {
       throw new BadRequestException('No user exist to send message');
     }
 
-    const createMessage = await this.messageModel.create({
+    await this.messageModel.create({
       message: message,
       user: user._id,
     });
 
-    return createMessage;
+    return { msg: `message sent sucessfully to ${user.username}` };
   }
 
   async getUserMessages(username: string) {
@@ -51,12 +50,25 @@ export class MessageService {
   }
 
   async findOneMessage(id: number) {
-    const result = await this.messageModel.findById(id);
-
-    if (!result) {
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
       throw new NotFoundException('Message not found');
     }
+    const result = await this.messageModel
+      .findById(id)
+      .populate('user', 'username')
+      .exec();
 
     return result;
+  }
+
+  async deleteMessage(id: number) {
+    const isValidId = mongoose.isValidObjectId(id);
+    if (!isValidId) {
+      throw new NotFoundException('Message not found');
+    }
+    await this.messageModel.findByIdAndDelete(id);
+
+    return { msg: 'user deleted successfully' };
   }
 }

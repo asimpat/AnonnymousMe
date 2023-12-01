@@ -62,7 +62,8 @@ export class AuthService {
         throw new BadRequestException('Incorrect credentials ');
       }
 
-      return { message: 'Login successful!' };
+      const token = await this.generateJwt(user);
+      return { message: 'Login successful!', token };
     }
   }
 

@@ -18,7 +18,7 @@ export class User extends Document {
   password: string;
 
   @Prop({
-    default: Roles.USER,
+    default: Roles.USER
   })
   role: Roles;
 

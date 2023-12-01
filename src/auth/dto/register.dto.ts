@@ -1,4 +1,11 @@
-import { IsOptional, IsNotEmpty, Length, IsString } from 'class-validator';
+import {
+  IsOptional,
+  IsNotEmpty,
+  Length,
+  IsString,
+  IsEnum,
+} from 'class-validator';
+import { Roles } from '../schema/user.schema';
 export class UserRegisterDto {
   @IsNotEmpty()
   @IsString()
@@ -10,7 +17,7 @@ export class UserRegisterDto {
   @Length(4, 10)
   password: string;
 
-  @IsOptional()
   @IsString()
-  readonly role: string;
+  @IsEnum(Roles, { message: 'please enter correct role here' })
+  readonly role: Roles;
 }
